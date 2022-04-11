@@ -1,0 +1,25 @@
+/* --------------------------------- COLORS --------------------------------- */
+
+$color-primary: #5e396d;
+$color-on-primary: white;
+
+$color-error: #be123c;
+$color-on-error: white;
+
+$color-text-1: hsla(0, 0%, 0%, 0.9);
+$color-text-2: hsla(0, 0%, 0%, 0.65);
+$color-text-3: hsla(0, 0%, 0%, 0.4);
+
+$color-surface-1: hsl(0, 0%, 100%);
+$color-surface-2: hsl(0, 0%, 97.5%);
+$color-surface-3: hsl(0, 0%, 95%);
+
+$color-contrast-surface-1: hsl(0, 0%, 36%);
+
+$color-border: rgba(0, 0, 0, 0.5);
+$color-focus-ring: rgba(0, 0, 0, 0.15);
+
+/* ---------------------------------- OTHER --------------------------------- */
+
+$side-padding: 2rem;
+$border-radius: 4px;

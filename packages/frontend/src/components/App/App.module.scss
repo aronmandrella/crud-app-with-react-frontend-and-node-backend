@@ -1,0 +1,103 @@
+@use "@theme/variables" as *;
+
+/* ----------------------------- MAIN CONTAINER ----------------------------- */
+
+.app {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+.app > * {
+  flex-shrink: 1;
+  flex-grow: 1;
+}
+
+/* --------------------------------- APP BAR -------------------------------- */
+
+.appBar {
+  flex-shrink: 0;
+  flex-grow: 0;
+
+  position: relative;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+
+  white-space: nowrap;
+  padding: $side-padding * 0.5 $side-padding;
+
+  color: $color-on-primary;
+  background-color: $color-primary;
+
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.appBarLogo {
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+.appBarLogo::after {
+  content: "/";
+
+  margin: 0 0.5em;
+  font-weight: 400;
+
+  opacity: 0.5;
+}
+
+.appBarHeader {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ------------------------------- APP SECTION ------------------------------ */
+
+.appSection {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.appSection > * {
+  flex-shrink: 1;
+  flex-grow: 1;
+}
+
+.appSectionHeader {
+  flex-shrink: 0;
+  flex-grow: 0;
+
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: $color-text-2;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------------------------- CONTENT CONTAINER --------------------------- */
+
+.appContent {
+  padding: $side-padding;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.createEventSection {
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.viewEventsSection {
+  flex-shrink: 1;
+  flex-grow: 1;
+
+  margin-top: $side-padding;
+
+  min-height: 20rem;
+}

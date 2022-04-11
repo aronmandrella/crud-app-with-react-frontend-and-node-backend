@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    // Input
+    "rootDir": "src",
+    "moduleResolution": "node",
+
+    // Input - inject types
+    "types": ["node", "jest"],
+
+    // Output
+    "outDir": "out",
+
+    // Output - format
+    "target": "ES2017",
+    "module": "CommonJS",
+
+    // Output - generate source maps
+    "sourceMap": true,
+
+    // Output - generate d.ts files and helpers for IDE
+    "declaration": true,
+    "declarationMap": true,
+
+    // TypeScript compilation flags
+    "strict": true,
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "strictNullChecks": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "removeComments": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "preserveConstEnums": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "src/**/*.test.ts", "src/**/*.spec.ts"]
+}

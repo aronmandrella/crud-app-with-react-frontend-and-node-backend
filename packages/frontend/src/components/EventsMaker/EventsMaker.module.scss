@@ -1,0 +1,28 @@
+@use "@theme/variables" as *;
+
+.root {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  column-gap: 2rem;
+  row-gap: 0.5rem;
+
+  @media (max-width: 700px) {
+    grid-auto-flow: row;
+    row-gap: 0.1rem;
+
+    & > * + * {
+      margin-left: 0px;
+      margin-top: 0.5rem;
+    }
+    & > *:last-child {
+      margin-left: 0px;
+      margin-top: 1.5rem;
+    }
+  }
+}
+
+.error {
+  font-size: 0.85rem;
+  color: $color-error;
+}

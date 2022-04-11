@@ -1,0 +1,95 @@
+@use "@theme/variables" as *;
+@use "sass:color";
+
+/* -------------------------------- CONTAINER ------------------------------- */
+
+.root {
+  overflow-x: auto;
+  overflow-y: scroll;
+  position: relative;
+
+  width: 100%;
+  background-color: $color-surface-1;
+
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+}
+
+/* --------------------------------- OVERLAY -------------------------------- */
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: color.change($color-surface-3, $alpha: 0.8);
+}
+
+/* ---------------------------------- TABLE --------------------------------- */
+
+.table {
+  width: 100%;
+  text-align: left;
+
+  background-color: $color-surface-1;
+}
+
+.table thead {
+  /*
+    NOTE:
+    There are JS based alternatives for IE support
+    but CSS sticky is currently supported in most modern browsers.
+  */
+  position: sticky;
+  top: 0;
+
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.table th {
+  text-align: left;
+
+  color: white;
+  background-color: $color-contrast-surface-1;
+}
+
+.table td,
+.table th {
+  padding: 0.7rem;
+
+  white-space: nowrap;
+}
+
+.table tr:hover td {
+  background-color: $color-surface-3;
+}
+
+.table tr:nth-child(even) {
+  background-color: $color-surface-2;
+}
+
+/* ------------------------------ TABLE CONTENT ----------------------------- */
+
+.actionButtonsCell {
+  display: flex;
+}
+.actionButtonsCell > * + * {
+  margin-left: 0.5em;
+}
+
+.actionButton {
+  cursor: pointer;
+  color: $color-text-3;
+}
+.actionButton:hover {
+  color: $color-text-2;
+}
+.actionButton:active {
+  color: $color-text-1;
+}
