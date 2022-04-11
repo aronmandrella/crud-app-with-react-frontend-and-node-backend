@@ -4,6 +4,8 @@
 
 ## How to install and run tests
 
+Tested with: Windows 10, Node.js v16.14.2
+
 ```bash
 npm install
 npm run postinstall

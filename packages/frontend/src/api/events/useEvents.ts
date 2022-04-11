@@ -109,8 +109,8 @@ export const useEvents = () => {
     return {
       createEvent: withApiResultHandler(async (newEventWithoutId: ICreateEventDto) => {
         setEvents((events) => {
-          const lastEvent = events[events.length - 1];
-          return [...events, { ...newEventWithoutId, id: lastEvent.id + 1 }];
+          const lastEventId = events[events.length - 1]?.id || 0;
+          return [...events, { ...newEventWithoutId, id: lastEventId + 1 }];
         });
 
         return await createEvent(newEventWithoutId);
