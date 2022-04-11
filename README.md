@@ -1,10 +1,6 @@
 # Basic CRUD app with React front-end and Node.js back-end (full-stack skills showcase)
 
-![ui_demo](TODO)
-
-## Demo link
-
-[TODO](TODO)
+![ui_demo](https://raw.githubusercontent.com/aronmandrella/crud-app-with-react-frontend-and-node-backend/master/ui_demo_1.PNG)
 
 ## How to install and run tests
 
