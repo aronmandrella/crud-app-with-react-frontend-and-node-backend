@@ -5,7 +5,7 @@ import { IEventDto } from '@project/globals';
 export class Event implements IEventDto {
   /*
     NOTE:
-    Constructor is private to accidental manual creation of entities.
+    I made constructor private to prevent accidental manual creation of entities.
     They should be created with repository api.
   */
   // eslint-disable-next-line

@@ -44,6 +44,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         statusCode: HttpStatus.BAD_REQUEST,
         error: {
           /*
+            NOTE:
             This string is not used for anything, but if frontend
             would like to handle various errors differently
             there could be some enum with all possibilities to

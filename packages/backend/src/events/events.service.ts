@@ -23,7 +23,7 @@ export class EventsService {
   ) {}
 
   /*
-    Ensure consistency of data in the database.
+    Ensures consistency of data in the database.
   */
   private normalizeDto<T extends { date?: string }>(dto: T) {
     const dtoCopy = { ...dto };
@@ -38,10 +38,11 @@ export class EventsService {
   async create(dto: ICreateEventDto): Promise<IEventDto> {
     /*
       NOTE:
-      Makes sure that dto has valid type. I think that assertions are the safest pick for ensuring types since
-      there is a near zero chance of making a typo (using a wrong interface or a wrong assertion).
-      If parameter's interface and assertion don't match, there will be either runtime
-      exception at assertion or a compile time error bellow assertion.
+      Makes sure that dto has valid shape, and that properties passed validation. I think that
+      assertions are the safest pick for ensuring types, since there is a near zero chance of
+      making a typo (using a wrong interface or a wrong assertion). If parameter's interface and
+      assertion don't match, there will be either a runtime exception at assertion, or a compile
+      time error bellow assertion.
     */
     assertCreateEventDto(dto);
     dto = this.normalizeDto(dto);
@@ -54,10 +55,10 @@ export class EventsService {
   async findAll(): Promise<IEventsArrayDto> {
     /*
       NOTE:
-      If pagination / infinite scroll would be needed this call would look more ore less like this:
+      If pagination / infinite scroll would be needed, this call would look more ore less like this:
       this.eventsRepository.find({skip: pageSize * page, take: pageSize});
     */
-    return this.eventsRepository.find({});
+    return this.eventsRepository.find();
   }
 
   async findOne(id: IEventId): Promise<IEventDto> {

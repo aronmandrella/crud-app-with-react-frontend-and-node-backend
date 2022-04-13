@@ -26,17 +26,16 @@ export class EventsController {
   create(@Body() dto: ICreateEventDto): Promise<IEventDto> {
     /*
       NOTE:
-
       Casts dto data without validation (service will be validating this data).
       
-      I did it like this, in big app there is a possibility that this service will be
+      I did it like this, since in big app there is a possibility that this service will be
       reused somewhere else. I think it's safer to full validate data at level that is
       interacting with database to ensure that invalid data will never leak into database.
 
-      Nest has some validation pipes, however since they are configured with decorators
-      property will never infer type form decorator even if it validates. There won't
-      be a lint error if you validate data as one type, and cast it as other type. I'm
-      not sure what to think about it. Explicit assertions seem a bit safer.
+      Nest has some validation pipes however they are configured with decorators.
+      Property will never infer type form decorator so there won't be a lint error
+      if you validate data as one type, and cast it as other type. 
+      Explicit assertions seems like a a bit safer choice to me.
     */
     return this.eventsService.create(dto);
   }
