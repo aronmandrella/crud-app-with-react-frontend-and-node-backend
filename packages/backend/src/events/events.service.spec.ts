@@ -102,10 +102,9 @@ const createMockEventsRepository = () => {
 
 describe('EventsService', () => {
   let service: EventsService;
-  let mockEventsRepository: ReturnType<typeof createMockEventsRepository>;
 
   beforeEach(async () => {
-    mockEventsRepository = createMockEventsRepository();
+    const mockEventsRepository = createMockEventsRepository();
 
     const mockEventsRepositoryProvider = {
       provide: getRepositoryToken(Event),
@@ -228,6 +227,8 @@ describe('EventsService', () => {
           await service.update(newEvent.id, { ...updateDto, id: 10 } as any);
 
         await expect(throwingAsyncFn()).rejects.toThrow();
+
+        expect(await service.findOne(newEvent.id)).toEqual(newEvent);
       }
     });
   });
@@ -263,14 +264,23 @@ describe('EventsService', () => {
           const INVALID_DTO: any = { ...VALID_CREATE_EVENT_DTO };
           INVALID_DTO[key] = invalidValue;
 
+          const allEventsBeforeFailedCreate = await service.findAll();
+
           const throwingAsyncFn1 = async () =>
             await service.create(INVALID_DTO);
           await expect(throwingAsyncFn1()).rejects.toThrow(DtoAssertionError);
+
+          const allEventsAfterFailedCreate = await service.findAll();
+          expect(allEventsBeforeFailedCreate).toEqual(
+            allEventsAfterFailedCreate,
+          );
 
           const newEvent = await service.create(VALID_CREATE_EVENT_DTO);
           const throwingAsyncFn2 = async () =>
             await service.update(newEvent.id, INVALID_DTO);
           await expect(throwingAsyncFn2()).rejects.toThrow(DtoAssertionError);
+
+          expect(await service.findOne(newEvent.id)).toEqual(newEvent);
         });
       }
     }

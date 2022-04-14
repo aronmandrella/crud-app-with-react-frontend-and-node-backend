@@ -1,43 +1,69 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConnectionOptions } from 'typeorm';
+import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
 
 import { EventsModule } from './events/events.module';
 
-const ormConfig: ConnectionOptions = {
-  type: 'sqlite',
+const createAppModuleClass = (config: {
+  environment: 'development' | 'production' | 'test';
+}) => {
+  const { environment } = config;
 
-  /*
-    TODO:
-    Configure nest so it reads .env files,
-    and configure db path inside this file.
-  */
-  database: 'db.sqlite',
+  const ormConfigByEnvironment: {
+    [key in typeof environment]: Omit<SqliteConnectionOptions, 'type'>;
+  } = {
+    test: {
+      database: ':memory:',
+      logging: false,
+      synchronize: true,
+    },
 
-  /*
-    TODO:
-    Configure nest so that it defines NODE_ENV,
-    and set it to 'true' only in 'development' mode.
-  */
-  logging: true,
+    development: {
+      /*
+        TODO:
+        Configure nest so it reads .env files,
+        and configure db path inside this file.
+      */
+      database: 'db.sqlite',
+      logging: true,
+      synchronize: true,
+    },
 
-  /*
-    NOTE:
-    In a real world app it would be false.
-    There would be migrations instead.
-  */
-  synchronize: true,
+    production: {
+      /*
+        TODO:
+        Configure nest so it reads .env files,
+        and configure db path inside this file.
+      */
+      database: 'db.sqlite',
+      logging: false,
+      /*
+        NOTE:
+        In a real world app it would be false.
+        There would be migrations instead.
+      */
+      synchronize: true,
+    },
+  };
+
+  const ormConfig: SqliteConnectionOptions = {
+    type: 'sqlite',
+    ...ormConfigByEnvironment[environment],
+  };
+
+  return {
+    imports: [
+      TypeOrmModule.forRoot({
+        ...ormConfig,
+        autoLoadEntities: true,
+      }),
+      EventsModule,
+    ],
+    controllers: [],
+    providers: [],
+  };
 };
-
-@Module({
-  imports: [
-    TypeOrmModule.forRoot({
-      ...ormConfig,
-      autoLoadEntities: true,
-    }),
-    EventsModule,
-  ],
-  controllers: [],
-  providers: [],
-})
+@Module(createAppModuleClass({ environment: 'development' }))
 export class AppModule {}
+@Module(createAppModuleClass({ environment: 'test' }))
+export class TestAppModule {}

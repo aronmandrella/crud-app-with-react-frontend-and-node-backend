@@ -4,6 +4,7 @@
   "types": "./out/index.d.ts",
   "scripts": {
     "test": "eslint src && jest",
+    "test:cov": "eslint src && jest --coverage",
     "build": "npm run test && del-cli ./out && tsc"
   },
   "devDependencies": {
