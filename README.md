@@ -15,7 +15,7 @@ npm test
 
 ## About tests
 
-Currently I've added tests only for `packages/globals` package. I'll add tests for `packages/backend` and `packages/frontend` later this week.
+Currently I've added tests only for `packages/globals` and `packages/backends` packages. I'll add tests for `packages/frontend` later this week.
 
 ## How to run
 
