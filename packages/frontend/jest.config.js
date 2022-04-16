@@ -12,6 +12,10 @@ const customJestConfig = {
     "^@ui/(.*)$": "<rootDir>/src/ui/$1",
     "^@helpers$": "<rootDir>/src/helpers",
     "^@helpers/(.*)$": "<rootDir>/src/helpers/$1",
+    "^@api$": "<rootDir>/src/api",
+    "^@api/(.*)$": "<rootDir>/src/api/$1",
+    "^@config$": "<rootDir>/src/config",
+    "^@config/(.*)$": "<rootDir>/src/config/$1",
   },
   testEnvironment: "jest-environment-jsdom",
 };

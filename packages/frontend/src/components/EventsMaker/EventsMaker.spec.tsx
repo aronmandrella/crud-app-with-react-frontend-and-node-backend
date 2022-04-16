@@ -12,14 +12,14 @@ import {
 /*                                  EXAMPLES                                  */
 /* -------------------------------------------------------------------------- */
 
-const VALID_INPUTS_EXAMPLE = {
+export const VALID_EVENT_FORM_INPUTS_EXAMPLE = {
   firstName: "some name",
   lastName: "some name",
   email: "mail@mail.com",
   date: "2022-04-19",
 };
 
-const INVALID_INPUTS_EXAMPLES = {
+export const INVALID_EVENT_FORM_INPUTS_EXAMPLES = {
   firstName: [""],
   lastName: [""],
   email: ["", "John", "@mail.com", "mail@"],
@@ -30,9 +30,47 @@ const INVALID_INPUTS_EXAMPLES = {
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
-const createOnCreateEventMockFn = () => {
+export const eventsInputsKeys = ["firstName", "lastName", "date", "email"] as const;
+
+export const createOnCreateEventMockFn = () => {
   const callback: IEventsMakerProps["onCreateEvent"] = () => {};
   return jest.fn(callback);
+};
+
+export const queryEventFormErrorMessageHTMLElement = (
+  inputKey: keyof typeof INPUTS_ERROR_MESSAGES
+) => {
+  return screen.queryByText(INPUTS_ERROR_MESSAGES[inputKey]);
+};
+
+export const getEventFormFieldsHTMLElements = () => {
+  return {
+    inputs: {
+      firstName: screen.getByPlaceholderText(INPUTS_PLACEHOLDERS.firstName),
+      lastName: screen.getByPlaceholderText(INPUTS_PLACEHOLDERS.lastName),
+      email: screen.getByPlaceholderText(INPUTS_PLACEHOLDERS.email),
+      date: screen.getByPlaceholderText(INPUTS_PLACEHOLDERS.date),
+    },
+    confirmButton: screen.getByText(ADD_EVENT_TEXT),
+  };
+};
+
+export const typeValuesIntoEventFromInputs = async (values: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  date: string;
+}) => {
+  const { inputs } = getEventFormFieldsHTMLElements();
+
+  for (const inputKey of eventsInputsKeys) {
+    const value = values[inputKey];
+    if (value) {
+      await userEvent.type(inputs[inputKey], value);
+    } else {
+      await userEvent.clear(inputs[inputKey]);
+    }
+  }
 };
 
 /* -------------------------------------------------------------------------- */
@@ -40,77 +78,41 @@ const createOnCreateEventMockFn = () => {
 /* -------------------------------------------------------------------------- */
 
 describe("<EventsMaker/>", () => {
-  const inputsKeys = ["firstName", "lastName", "date", "email"] as const;
-
-  const queryErrorMessageHTMLElement = (inputKey: keyof typeof INPUTS_ERROR_MESSAGES) => {
-    return screen.queryByText(INPUTS_ERROR_MESSAGES[inputKey]);
-  };
-
-  const getFormFieldsHTMLElements = () => {
-    return {
-      inputs: {
-        firstName: screen.getByPlaceholderText(INPUTS_PLACEHOLDERS.firstName),
-        lastName: screen.getByPlaceholderText(INPUTS_PLACEHOLDERS.lastName),
-        email: screen.getByPlaceholderText(INPUTS_PLACEHOLDERS.email),
-        date: screen.getByPlaceholderText(INPUTS_PLACEHOLDERS.date),
-      },
-      confirmButton: screen.getByText(ADD_EVENT_TEXT),
-    };
-  };
-
-  const typeValuesIntoInputs = async (values: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    date: string;
-  }) => {
-    const { inputs } = getFormFieldsHTMLElements();
-
-    for (const inputKey of inputsKeys) {
-      const value = values[inputKey];
-      if (value) {
-        await userEvent.type(inputs[inputKey], value);
-      } else {
-        await userEvent.clear(inputs[inputKey]);
-      }
-    }
-  };
-
   describe("confirm button", () => {
     it(`should be rendered`, () => {
       render(<EventsMaker onCreateEvent={() => {}} />);
 
-      const { confirmButton } = getFormFieldsHTMLElements();
+      const { confirmButton } = getEventFormFieldsHTMLElements();
       expect(confirmButton).toBeInTheDocument();
     });
 
     it("should show inputs errors once clicked", async () => {
       render(<EventsMaker onCreateEvent={() => {}} />);
 
-      const { confirmButton } = getFormFieldsHTMLElements();
+      const { confirmButton } = getEventFormFieldsHTMLElements();
 
-      for (const inputKey of inputsKeys) {
-        expect(queryErrorMessageHTMLElement(inputKey)).toBeNull();
+      for (const inputKey of eventsInputsKeys) {
+        expect(queryEventFormErrorMessageHTMLElement(inputKey)).toBeNull();
       }
 
       await userEvent.click(confirmButton);
 
-      for (const inputKey of inputsKeys) {
-        expect(queryErrorMessageHTMLElement(inputKey)).toBeInTheDocument();
+      for (const inputKey of eventsInputsKeys) {
+        expect(queryEventFormErrorMessageHTMLElement(inputKey)).toBeInTheDocument();
       }
     });
 
     it("should be disabled if inputs errors are visible", async () => {
       render(<EventsMaker onCreateEvent={() => {}} />);
 
-      const { confirmButton } = getFormFieldsHTMLElements();
+      const { confirmButton } = getEventFormFieldsHTMLElements();
 
       expect(confirmButton).not.toBeDisabled();
 
       await userEvent.click(confirmButton);
       expect(confirmButton).toBeDisabled();
 
-      await typeValuesIntoInputs(VALID_INPUTS_EXAMPLE);
+      await typeValuesIntoEventFromInputs(VALID_EVENT_FORM_INPUTS_EXAMPLE);
       expect(confirmButton).not.toBeDisabled();
     });
 
@@ -118,7 +120,7 @@ describe("<EventsMaker/>", () => {
       const mockHandleCreateEventFn = createOnCreateEventMockFn();
       render(<EventsMaker onCreateEvent={mockHandleCreateEventFn} />);
 
-      const { confirmButton } = getFormFieldsHTMLElements();
+      const { confirmButton } = getEventFormFieldsHTMLElements();
 
       await userEvent.click(confirmButton);
       expect(mockHandleCreateEventFn).not.toHaveBeenCalled();
@@ -126,9 +128,9 @@ describe("<EventsMaker/>", () => {
       await userEvent.click(confirmButton);
       expect(mockHandleCreateEventFn).not.toHaveBeenCalled();
 
-      await typeValuesIntoInputs(VALID_INPUTS_EXAMPLE);
+      await typeValuesIntoEventFromInputs(VALID_EVENT_FORM_INPUTS_EXAMPLE);
       await userEvent.click(confirmButton);
-      expect(mockHandleCreateEventFn).toHaveBeenCalledWith(VALID_INPUTS_EXAMPLE);
+      expect(mockHandleCreateEventFn).toHaveBeenCalledWith(VALID_EVENT_FORM_INPUTS_EXAMPLE);
     });
   });
 
@@ -137,25 +139,25 @@ describe("<EventsMaker/>", () => {
       it(`should be rendered`, () => {
         render(<EventsMaker onCreateEvent={() => {}} />);
 
-        const { inputs } = getFormFieldsHTMLElements();
+        const { inputs } = getEventFormFieldsHTMLElements();
         expect(inputs[inputKey]).toBeInTheDocument();
       });
 
-      for (const invalidValue of INVALID_INPUTS_EXAMPLES[inputKey]) {
+      for (const invalidValue of INVALID_EVENT_FORM_INPUTS_EXAMPLES[inputKey]) {
         it(`should show error and prevent event creation if filled with '${invalidValue}'`, async () => {
           const mockHandleCreateEventFn = createOnCreateEventMockFn();
           render(<EventsMaker onCreateEvent={mockHandleCreateEventFn} />);
 
-          const { confirmButton } = getFormFieldsHTMLElements();
+          const { confirmButton } = getEventFormFieldsHTMLElements();
 
-          await typeValuesIntoInputs({
-            ...VALID_INPUTS_EXAMPLE,
+          await typeValuesIntoEventFromInputs({
+            ...VALID_EVENT_FORM_INPUTS_EXAMPLE,
             [inputKey]: invalidValue,
           });
           await userEvent.click(confirmButton);
 
           expect(mockHandleCreateEventFn).not.toHaveBeenCalled();
-          expect(queryErrorMessageHTMLElement(inputKey)).toBeInTheDocument();
+          expect(queryEventFormErrorMessageHTMLElement(inputKey)).toBeInTheDocument();
         });
       }
     });

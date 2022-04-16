@@ -1,53 +1,68 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { EventsTable, IEventsTableProps, ERROR_TITLE } from "./EventsTable";
+import { EventsTable, ERROR_TITLE, createRandomCreateEventDto } from "./EventsTable";
+import { IEventDto } from "@project/globals";
 
 /* -------------------------------------------------------------------------- */
-/*                                  EXAMPLES                                  */
+/*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
-const EXAMPLE_EVENTS: IEventsTableProps["events"] = [
-  {
-    id: 1,
-    firstName: "Joe",
-    lastName: "Doe",
-    email: "joe.doel@mail.com",
-    date: "2022-04-14T20:00:00.616Z",
-  },
-  {
-    id: 2,
-    firstName: "John",
-    lastName: "Smith",
-    email: "john.smith@mail.com",
-    date: "2022-04-14T21:00:00.616Z",
-  },
-];
+export const createValidEventDtoExample = (id: number): IEventDto => {
+  return {
+    id: id,
+    ...createRandomCreateEventDto(),
+  };
+};
+
+export const queryEventsTableLoaderHTMLElement = () => {
+  return document.querySelector(".overlay svg") as HTMLElement | null;
+};
+
+export const queryEventsTableRowHTMLElement = (rowId: number | string) => {
+  return document.querySelector(`tr[data-eventid="${rowId}"]`) as HTMLElement | null;
+};
+
+export const getEventsTableRowHTMLElement = (rowId: number | string) => {
+  const element = queryEventsTableRowHTMLElement(rowId);
+  if (!element) {
+    throw new Error(`Event row with id '${rowId}' not found.`);
+  }
+  return element as HTMLElement;
+};
+
+export const getEventsTableRowDeleteButtonHTMLElement = (rowId: number | string) => {
+  const row = getEventsTableRowHTMLElement(rowId);
+  return within(row).getByLabelText("delete");
+};
+
+export const getEventsTableRowUpdateButtonHTMLElement = (rowId: number | string) => {
+  const row = getEventsTableRowHTMLElement(rowId);
+  return within(row).getByLabelText("update");
+};
 
 /* -------------------------------------------------------------------------- */
 /*                                    TESTS                                   */
 /* -------------------------------------------------------------------------- */
 
 describe("<EventsTable/>", () => {
-  const queryLoaderHTMLElement = () => {
-    return document.querySelector(".overlay svg") as HTMLElement | null;
-  };
-  const queryTableRowHTMLElement = (rowId: number | string) => {
-    return document.querySelector(`tr[data-eventid="${rowId}"]`) as HTMLElement | null;
-  };
+  const EXAMPLE_EVENTS: IEventDto[] = [
+    createValidEventDtoExample(1),
+    createValidEventDtoExample(2),
+  ];
 
   describe("loading and error states", () => {
     it(`should show loader if 'isFetching' is 'true' and if there are no events`, () => {
       const { rerender } = render(<EventsTable events={[]} />);
-      expect(queryLoaderHTMLElement()).toBeNull();
+      expect(queryEventsTableLoaderHTMLElement()).toBeNull();
 
       rerender(<EventsTable isFetching events={[]} />);
-      expect(queryLoaderHTMLElement()).toBeInTheDocument();
+      expect(queryEventsTableLoaderHTMLElement()).toBeInTheDocument();
 
       rerender(<EventsTable isFetching events={EXAMPLE_EVENTS} />);
-      expect(queryLoaderHTMLElement()).toBeNull();
+      expect(queryEventsTableLoaderHTMLElement()).toBeNull();
 
       rerender(<EventsTable events={[]} />);
-      expect(queryLoaderHTMLElement()).toBeNull();
+      expect(queryEventsTableLoaderHTMLElement()).toBeNull();
     });
 
     it("should show error if 'error' is provided and if 'isFetching' is not 'true' even if there are no events", () => {
@@ -77,7 +92,7 @@ describe("<EventsTable/>", () => {
       render(<EventsTable events={EXAMPLE_EVENTS} />);
 
       for (const event of EXAMPLE_EVENTS) {
-        const row = queryTableRowHTMLElement(event.id);
+        const row = queryEventsTableRowHTMLElement(event.id);
         expect(row).toBeInTheDocument();
         if (!row) throw new Error("Row should exist in table.");
 
@@ -100,12 +115,8 @@ describe("<EventsTable/>", () => {
       );
 
       for (const event of EXAMPLE_EVENTS) {
-        const row = queryTableRowHTMLElement(event.id);
-        expect(row).toBeInTheDocument();
-        if (!row) throw new Error("Row should exist in table.");
-
-        const deleteButton = within(row).getByLabelText("delete");
-        const updateButton = within(row).getByLabelText("update");
+        const deleteButton = getEventsTableRowDeleteButtonHTMLElement(event.id);
+        const updateButton = getEventsTableRowUpdateButtonHTMLElement(event.id);
 
         await userEvent.click(deleteButton);
         expect(handleDeleteEventMockFn).toBeCalledWith(event.id);

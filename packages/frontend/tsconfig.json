@@ -19,6 +19,8 @@
     "paths": {
       "@api": ["./src/api"],
       "@api/*": ["./src/api/*"],
+      "@config": ["./src/config"],
+      "@config/*": ["./src/config/*"],
       "@theme": ["./src/theme"],
       "@theme/*": ["./src/theme/*"],
       "@ui": ["./src/ui"],

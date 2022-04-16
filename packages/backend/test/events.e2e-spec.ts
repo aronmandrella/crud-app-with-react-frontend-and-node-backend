@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { HttpAdapterHost } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
-import { TestAppModule } from './../src/app.module';
+import { AppModule } from './../src/app.module';
 import { INestApplication } from '@nestjs/common';
 import { AllExceptionsFilter } from '../src/all-exceptions.filter';
 import {
@@ -91,7 +91,7 @@ describe('AppController, Events (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
-      imports: [TestAppModule],
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();

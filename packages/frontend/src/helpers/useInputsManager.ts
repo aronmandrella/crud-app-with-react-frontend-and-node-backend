@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 /*
     NOTE:
@@ -24,19 +24,37 @@ export const useInputsManager = <IInputs extends Record<string, string>>(props: 
 
   const { initialValues, errorDetectors } = props;
 
-  const initialErrors = useMemo(() => {
-    const inputsKeys = Object.keys(initialValues) as (keyof typeof initialValues)[];
+  const calculateErrors = useCallback(
+    (values: IInputs): IErrors => {
+      const inputsKeys = Object.keys(values) as (keyof typeof values)[];
 
-    return inputsKeys.reduce((errors, inputKey) => {
-      errors[inputKey] = errorDetectors[inputKey](initialValues[inputKey]);
-      return errors;
-    }, {} as IErrors);
-  }, [initialValues, errorDetectors]);
+      return inputsKeys.reduce((errors, inputKey) => {
+        errors[inputKey] = errorDetectors[inputKey](values[inputKey]);
+        return errors;
+      }, {} as IErrors);
+    },
+    [errorDetectors]
+  );
+
+  const initialErrors = useMemo(() => {
+    return calculateErrors(initialValues);
+  }, [calculateErrors, initialValues]);
 
   const [values, setValues] = useState<IInputs>(initialValues);
   const [errors, setErrors] = useState<IErrors>(initialErrors);
 
   const hasErrors = Object.values(errors).findIndex((v) => typeof v === "string") !== -1;
+
+  /*
+    Refresh current errors when error calculate callbacks change.
+  */
+  useEffect(
+    () => {
+      setErrors(calculateErrors(values));
+    },
+    // eslint-disable-next-line
+    [calculateErrors]
+  );
 
   /* ----------------------------- EVENT HANDLERS ----------------------------- */
 

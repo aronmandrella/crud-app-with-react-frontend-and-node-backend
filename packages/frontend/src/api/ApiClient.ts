@@ -5,6 +5,7 @@ import {
   assertApiErrorResponseDto,
   assertApiSuccessResponseDto,
 } from "@project/globals";
+import config from "@config";
 
 /*
   Little helper for managing requests responses / errors.
@@ -123,9 +124,5 @@ class ApiClient {
 
 export const apiClientInstance = new ApiClient({
   timeout: 5000,
-  /*
-    TODO:
-    Read backend url from .env file.
-  */
-  baseURL: "http://localhost:3001",
+  baseURL: config.SERVER_URL,
 });

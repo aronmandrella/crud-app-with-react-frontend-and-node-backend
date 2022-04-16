@@ -4,7 +4,7 @@
 
 ## How to install and run tests
 
-Tested with: Windows 10, Node.js v16.14.0 (Latest Node.js v16.14.2 has some issues with NPM workspaces)
+Build with: Windows 10, Node.js v16.14.0 (Latest Node.js v16.14.2 has some issues with NPM workspaces)
 
 ```bash
 npm ci
@@ -12,6 +12,16 @@ npm run postinstall
 
 npm test
 ```
+
+### About tests
+
+I didn't write tests for every single function, but I think I've tested the most important functionalities.
+
+Some of tests probably are not that useful, since sometimes the same thing is tested by multiple
+tests, hoverer my main goal was to create various test examples, that cover various scenarios (unit/integration/e2e/components/hooks/functions).
+
+For simplicity I export/import some examples/helpers directly between tests. They could be extracted into separate files,
+or be defined in 'jest.config.ts'.
 
 ## How to run
 
@@ -37,13 +47,13 @@ npm run start:backend
 
 ## Specifications:
 
-✔️ Uses Next.js + React + Nest.js (wrapper around express.js) + SQLite + TypeORM + TypeScript.
+✔️ Uses Next.js + React + Nest.js (wrapper around express.js) + SQLite + TypeORM + TypeScript + Jest + @testing-library/react.
 
 ✔️ User can do CRUD (create, read, update, delete) operations on events
 
 ✔️ API payloads are validated both in front-end and in back-end
 
-✔️ Has tests
+✔️ Has frontend and backend tests (unit / integration / end-to-end)
 
 ✔️ Front-end and back-end share TypeScript interfaces
 

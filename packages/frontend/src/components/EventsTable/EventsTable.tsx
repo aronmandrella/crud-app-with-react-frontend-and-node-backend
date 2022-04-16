@@ -3,8 +3,15 @@ import styles from "./EventsTable.module.scss";
 import React from "react";
 import clsx from "clsx";
 
-import { IEventDto, IEventId, IEventsArrayDto, IUpdateEventDto } from "@project/globals";
+import {
+  IEventDto,
+  IEventId,
+  IEventsArrayDto,
+  IUpdateEventDto,
+  ICreateEventDto,
+} from "@project/globals";
 import { ErrorBox, Spinner, Icon } from "@ui";
+import { makeRandomString } from "@helpers";
 
 /* -------------------------------------------------------------------------- */
 /*                               HELPER FOR DEMO                              */
@@ -32,11 +39,14 @@ const showAboutRandomizedUpdateAlert = () => {
   }
 };
 
-const makeRandomString = (length: number): string =>
-  Math.random()
-    .toString(36)
-    .replace(/[^a-z]+/g, "")
-    .slice(0, length);
+export const createRandomCreateEventDto = (): ICreateEventDto => {
+  return {
+    firstName: makeRandomString(8),
+    lastName: makeRandomString(8),
+    email: `${makeRandomString(8)}@${makeRandomString(8)}.com`,
+    date: new Date(Math.random() * 10000000000000).toISOString(),
+  };
+};
 
 /* -------------------------------------------------------------------------- */
 /*                                ROW COMPONENT                               */
@@ -73,12 +83,7 @@ export const EventsTableRow: React.VFC<IEventsTableRowProps> = React.memo((props
     if (onUpdateEvent) {
       showAboutRandomizedUpdateAlert();
 
-      onUpdateEvent(id, {
-        firstName: makeRandomString(8),
-        lastName: makeRandomString(8),
-        email: `${makeRandomString(8)}@${makeRandomString(8)}.com`,
-        date: new Date(Math.random() * 10000000000000).toISOString(),
-      });
+      onUpdateEvent(id, createRandomCreateEventDto());
     }
   };
 

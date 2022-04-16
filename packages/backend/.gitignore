@@ -396,4 +396,5 @@ Temporary Items
 # Local
 # .env
 dist
-db.sqlite
+db.development.sqlite
+db.production.sqlite

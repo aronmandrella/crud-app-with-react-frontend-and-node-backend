@@ -98,8 +98,10 @@ export const useEvents = () => {
             In a big app there could be a toasts notifications system or something.
             Callback promise also could be used to display a warning in the UI.
           */
-          console.error(result);
-          alert("Mutation failed, details in the console.");
+          if (process.env.NODE_ENV !== "test") {
+            console.error(result);
+            alert("Mutation failed, details in the console.");
+          }
         }
 
         return result;

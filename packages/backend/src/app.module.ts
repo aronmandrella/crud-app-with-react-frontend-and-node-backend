@@ -4,38 +4,28 @@ import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionO
 
 import { EventsModule } from './events/events.module';
 
-const createAppModuleClass = (config: {
-  environment: 'development' | 'production' | 'test';
-}) => {
-  const { environment } = config;
+import config from './config';
+
+const createAppModuleConfig = () => {
+  const { ENVIRONMENT, SQLITE_DATABASE } = config;
 
   const ormConfigByEnvironment: {
-    [key in typeof environment]: Omit<SqliteConnectionOptions, 'type'>;
+    [key in typeof ENVIRONMENT]: Omit<SqliteConnectionOptions, 'type'>;
   } = {
     test: {
-      database: ':memory:',
+      database: SQLITE_DATABASE,
       logging: false,
       synchronize: true,
     },
 
     development: {
-      /*
-        TODO:
-        Configure nest so it reads .env files,
-        and configure db path inside this file.
-      */
-      database: 'db.sqlite',
+      database: SQLITE_DATABASE,
       logging: true,
       synchronize: true,
     },
 
     production: {
-      /*
-        TODO:
-        Configure nest so it reads .env files,
-        and configure db path inside this file.
-      */
-      database: 'db.sqlite',
+      database: SQLITE_DATABASE,
       logging: false,
       /*
         NOTE:
@@ -48,7 +38,7 @@ const createAppModuleClass = (config: {
 
   const ormConfig: SqliteConnectionOptions = {
     type: 'sqlite',
-    ...ormConfigByEnvironment[environment],
+    ...ormConfigByEnvironment[ENVIRONMENT],
   };
 
   return {
@@ -63,7 +53,5 @@ const createAppModuleClass = (config: {
     providers: [],
   };
 };
-@Module(createAppModuleClass({ environment: 'development' }))
+@Module(createAppModuleConfig())
 export class AppModule {}
-@Module(createAppModuleClass({ environment: 'test' }))
-export class TestAppModule {}

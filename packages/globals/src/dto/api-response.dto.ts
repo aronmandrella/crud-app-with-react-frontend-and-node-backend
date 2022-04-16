@@ -1,4 +1,4 @@
-import { object, literal, string, record, unknown, Infer, number } from "superstruct";
+import { object, literal, string, record, unknown, Infer, number, array, union } from "superstruct";
 import { createDtoAssertionFn } from "../helpers";
 
 /* --------------------------------- SCHEMAS -------------------------------- */
@@ -15,7 +15,7 @@ const apiErrorResponseDtoSchema = object({
 const apiSuccessResponseDtoSchema = object({
   success: literal(true),
   statusCode: number(),
-  data: record(string(), unknown()),
+  data: union([record(string(), unknown()), array(unknown())]),
 });
 
 /* ------------------------------- ASSERTIONS ------------------------------- */
