@@ -8,6 +8,41 @@ import { Button, Input } from "@ui";
 import { useInputsManager } from "@helpers";
 
 /* -------------------------------------------------------------------------- */
+/*                                  MESSAGES                                  */
+/* -------------------------------------------------------------------------- */
+
+/* 
+  NOTE:
+  Messages exported for tests.
+  If application was localized, test would probably use data
+  from a json or some external provider in both places.
+*/
+export const INPUTS_PLACEHOLDERS = {
+  firstName: "First name",
+  lastName: "Last name",
+  email: "Email",
+  date: "Date",
+};
+
+/*
+  NOTE:
+  For simplicity and easy testing this assumes that each field
+  has only one error message that says what data is expected.
+  Supporting various error messages in tests, would require providing
+  unique 'id's to error message span/div, and labeling inputs with
+  'aria-describedby' (or data-testid). Big application probably 
+  would have some helpers for that.
+*/
+export const INPUTS_ERROR_MESSAGES = {
+  firstName: "First name is required",
+  lastName: "Last name is required",
+  email: "Invalid email address",
+  date: "Invalid date",
+};
+
+export const ADD_EVENT_TEXT = "Add event";
+
+/* -------------------------------------------------------------------------- */
 /*                                INPUTS CONFIG                               */
 /* -------------------------------------------------------------------------- */
 
@@ -28,22 +63,22 @@ const initialInputs = {
 const inputsErrorDetectors = {
   firstName: (value: string) => {
     if (!value.length) {
-      return "This field is required";
+      return INPUTS_ERROR_MESSAGES.firstName;
     }
   },
   lastName: (value: string) => {
     if (!value.length) {
-      return "This field is required";
+      return INPUTS_ERROR_MESSAGES.lastName;
     }
   },
   email: (value: string) => {
     if (!isEmail(value)) {
-      return "Invalid email address";
+      return INPUTS_ERROR_MESSAGES.email;
     }
   },
   date: (value: string) => {
     if (!isValidDateString(value)) {
-      return "Invalid date";
+      return INPUTS_ERROR_MESSAGES.date;
     }
   },
 };
@@ -52,7 +87,7 @@ const inputsErrorDetectors = {
 /*                               MAIN COMPONENT                               */
 /* -------------------------------------------------------------------------- */
 
-interface IEventsMakerProps {
+export interface IEventsMakerProps {
   className?: string;
   onCreateEvent: (data: ICreateEventDto) => void;
 }
@@ -94,13 +129,13 @@ export const EventsMaker: React.VFC<IEventsMakerProps> = React.memo((props) => {
 
   return (
     <div className={clsx(className, styles.root)}>
-      <Input placeholder="First name" {...getInputProps("firstName")} />
+      <Input placeholder={INPUTS_PLACEHOLDERS.firstName} {...getInputProps("firstName")} />
       <div className={styles.error}>{getError("firstName")}</div>
 
-      <Input placeholder="Last name" {...getInputProps("lastName")} />
+      <Input placeholder={INPUTS_PLACEHOLDERS.lastName} {...getInputProps("lastName")} />
       <div className={styles.error}>{getError("lastName")}</div>
 
-      <Input placeholder="Email" {...getInputProps("email")} />
+      <Input placeholder={INPUTS_PLACEHOLDERS.email} {...getInputProps("email")} />
       <div className={styles.error}>{getError("email")}</div>
 
       <Input
@@ -111,13 +146,13 @@ export const EventsMaker: React.VFC<IEventsMakerProps> = React.memo((props) => {
           similar. Writing it from scratch is also an option but would take some time.
         */
         type="date"
-        placeholder="Date"
+        placeholder={INPUTS_PLACEHOLDERS.date}
         {...getInputProps("date")}
       />
       <div className={styles.error}>{getError("date")}</div>
 
       <Button onClick={handleAddEvent} disabled={hasErrors && !isMutingErrors}>
-        Add event
+        {ADD_EVENT_TEXT}
       </Button>
     </div>
   );

@@ -9,7 +9,7 @@ const HomePage: NextPage = () => {
   NOTE:
 
   In a real world application maybe there would be a
-  getServerSideProps call. It would pre-fetch events in the backend
+  getServerSideProps call. It would server-side pre-fetch events
   and pre-generate initial html for user.
 
   All next fetches (after create, delete or update) would be handled

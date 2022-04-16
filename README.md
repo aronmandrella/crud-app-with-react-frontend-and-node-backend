@@ -4,18 +4,14 @@
 
 ## How to install and run tests
 
-Tested with: Windows 10, Node.js v16.14.2
+Tested with: Windows 10, Node.js v16.14.0 (Latest Node.js v16.14.2 has some issues with NPM workspaces)
 
 ```bash
-npm install
+npm ci
 npm run postinstall
 
 npm test
 ```
-
-## About tests
-
-Currently I've added tests only for `packages/globals` package. I'll add tests for `packages/backend` and `packages/frontend` later this week.
 
 ## How to run
 
