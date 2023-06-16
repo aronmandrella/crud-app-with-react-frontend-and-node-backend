@@ -47,7 +47,7 @@ npm run start:backend
 
 ## Specifications:
 
-✔️ Uses Next.js + React + Nest.js (wrapper around express.js) + SQLite + TypeORM + TypeScript + Jest + @testing-library/react.
+✔️ Uses Next.js + React + Nest.js + SQLite + TypeORM + TypeScript + Jest + @testing-library/react.
 
 ✔️ User can do CRUD (create, read, update, delete) operations on events
 
